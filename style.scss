@@ -1,0 +1,470 @@
+*,
+*::before,
+*::after {
+  padding: 0;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+body {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  font-size: 0.83vw;
+  background-image: linear-gradient(#131111, #111 50%);
+  perspective: 100em;
+  overflow: hidden;
+
+  *:not(:empty) {
+    transform-style: preserve-3d;
+  }
+}
+
+$speed: 12s;
+$stepInit: 0%, 100%;
+$step2: 24%;
+$step3: 48%;
+$step4: 51%;
+$step5: 54%;
+$rspeed: 60s -24s;
+
+.scene {
+  position: relative;
+  animation: sceneRotate #{$rspeed} infinite linear;
+
+  @keyframes sceneRotate {
+    from {
+      transform: rotateY(0deg);
+    }
+    to {
+      transform: rotateY(360deg);
+    }
+  }
+
+  & * {
+    position: absolute;
+  }
+}
+
+.claw {
+  left: -25em;
+  top: 10em;
+
+  & i {
+    top: -1em;
+    left: 50%;
+    width: var(--iWidth, 1em);
+    height: 2em;
+    background-image: linear-gradient(90deg, #877, #070000, #877);
+    transform-origin: 50% 1.5em;
+    animation: var(--animation, none);
+    border-radius: 50%;
+    transform-style: preserve-3d;
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: inherit;
+      background: inherit;
+      transform: rotateY(60deg);
+    }
+
+    &::after {
+      transform: rotateY(120deg);
+    }
+  }
+}
+
+.stemBase {
+  width: 4em;
+  animation: base #{$speed} infinite;
+  --iWidth: 80%;
+  --animation: basei #{$speed} infinite;
+
+  & > i {
+    height: 4em;
+    border-radius: 25%;
+  }
+
+  @keyframes base {
+    #{$stepInit},
+    #{$step3} {
+      transform: translateX(-50%) rotateZ(0deg);
+      animation-timing-function: ease-in;
+    }
+    #{$step4} {
+      transform: translateX(-50%) rotateZ(45deg);
+      animation-timing-function: ease-in-out;
+    }
+  }
+
+  @keyframes basei {
+    #{$stepInit} {
+      transform: translateX(-50%) rotateZ(-5deg);
+      animation-timing-function: ease-in-out;
+    }
+    #{$step2} {
+      transform: translateX(-50%) rotateZ(4.5deg);
+    }
+    #{$step3} {
+      transform: translateX(-50%) rotateZ(-10deg);
+      animation-timing-function: ease-in;
+    }
+    #{$step4} {
+      transform: translateX(-50%) rotateZ(0deg);
+      animation-timing-function: ease-in-out;
+    }
+  }
+}
+
+.stemTop {
+  width: 100%;
+  --iWidth: 90%;
+  --animation: topi #{$speed} infinite;
+
+  @keyframes topi {
+    #{$stepInit},
+    #{$step3} {
+      transform: translateX(-50%) rotateZ(5deg);
+      animation-timing-function: ease-in;
+    }
+    #{$step4} {
+      transform: translateX(-50%) rotateZ(0deg);
+      animation-timing-function: ease-in-out;
+    }
+  }
+}
+
+.fingers {
+  left: 50%;
+  animation: fingers #{$speed} infinite;
+  --animation: fingersi #{$speed} infinite ease-in-out;
+
+  @keyframes fingers {
+    #{$stepInit},
+    #{$step3} {
+      transform: rotateZ(0deg);
+      animation-timing-function: ease-in;
+    }
+    #{$step4} {
+      transform: rotateZ(-45deg);
+      animation-timing-function: ease-in-out;
+    }
+  }
+
+  @keyframes fingersi {
+    #{$stepInit},
+    #{$step2 * 0.4} {
+      transform: translateX(-50%) rotateZ(12deg);
+    }
+    #{$step2 * 0.7},
+    #{$step4} {
+      transform: translateX(-50%) rotateZ(9deg);
+    }
+    #{$step2},
+    #{$step4 - 0.5%} {
+      transform: translateX(-50%) rotateZ(11.5deg);
+    }
+  }
+}
+
+.finger {
+  animation: finger #{$speed} infinite ease-in-out alternate;
+
+  @keyframes finger {
+    from {
+      transform: rotateX(calc(var(--fingerAngle, 0deg) + 170deg));
+    }
+    to {
+      transform: rotateX(calc(var(--fingerAngle, 0deg) + 190deg));
+    }
+  }
+
+  &:nth-child(2) {
+    --fingerAngle: 120deg;
+  }
+  &:nth-child(3) {
+    --fingerAngle: 240deg;
+  }
+
+  & > i {
+    width: 0.25em;
+    --iWidth: 120%;
+  }
+}
+
+.ballContainer {
+  bottom: -10em;
+}
+
+.ballArm {
+  bottom: 0;
+  animation: ballArmT $speed infinite, ballArmW $speed infinite,
+    ballArmH $speed infinite;
+  transform-origin: bottom left;
+
+  @keyframes ballArmT {
+    #{$stepInit},
+    #{$step2} {
+      transform: translateX(-25em) rotateZ(0deg);
+      animation-timing-function: ease;
+    }
+    #{$step3} {
+      transform: translateX(-25em) rotateZ(-108deg);
+      animation-timing-function: ease-in;
+    }
+    #{$step4} {
+      transform: translateX(-25em) rotateZ(-22deg);
+      animation-timing-function: linear;
+    }
+    #{$step5} {
+      transform: translateX(19.5em) rotateZ(0deg);
+      animation-timing-function: ease-out;
+    }
+  }
+  @keyframes ballArmW {
+    #{$stepInit},
+    #{$step2} {
+      width: 12.3em;
+      animation-timing-function: ease;
+    }
+    #{$step3} {
+      width: 14em;
+      animation-timing-function: ease-in;
+    }
+    #{$step4},
+    #{$step5} {
+      width: 23em;
+      animation-timing-function: ease-out;
+    }
+  }
+  @keyframes ballArmH {
+    #{$stepInit},
+    #{$step4} {
+      height: 0;
+      animation-timing-function: linear;
+    }
+    #{$step5} {
+      height: 8em;
+      animation-timing-function: ease-in;
+    }
+    #{$step5 + 5%},
+    #{$step5 + 11%},
+    #{$step5 + 15%},
+    #{$step5 + 17%},
+    #{$step5 + 19%},
+    #{$step5 + 21%} {
+      height: 0;
+      animation-timing-function: ease-out;
+    }
+    #{$step5 + 8%} {
+      height: 4em;
+      animation-timing-function: ease-in;
+    }
+    #{$step5 + 13%} {
+      height: 2em;
+      animation-timing-function: ease-in;
+    }
+    #{$step5 + 16%} {
+      height: 1em;
+      animation-timing-function: ease-in;
+    }
+    #{$step5 + 18%} {
+      height: 0.5em;
+      animation-timing-function: ease-in;
+    }
+    #{$step5 + 20%} {
+      height: 0.25em;
+      animation-timing-function: ease-in;
+    }
+  }
+}
+
+.armCor {
+  animation: armCor $speed infinite;
+  top: 0;
+  right: 0;
+
+  @keyframes armCor {
+    #{$stepInit},
+    #{$step2} {
+      transform: rotateZ(0deg);
+      animation-timing-function: ease;
+    }
+    #{$step3} {
+      transform: rotateZ(108deg);
+      animation-timing-function: ease-in;
+    }
+    #{$step4} {
+      transform: rotateZ(22deg);
+      animation-timing-function: linear;
+    }
+    #{$step5} {
+      transform: rotateZ(0deg);
+      animation-timing-function: linear;
+    }
+  }
+}
+
+.sceneCor {
+  animation: sceneRotate #{$rspeed} infinite linear reverse;
+}
+
+.ball {
+  left: -2em;
+  bottom: 100%;
+  width: 4em;
+  height: 4em;
+  background-image: radial-gradient(circle at top, #fdd, #000);
+  border-radius: 50%;
+}
+
+.ballShadow {
+  bottom: 0;
+  width: 8em;
+  height: 8em;
+  background-image: radial-gradient(#000, #0000 66%);
+  animation: ballShadowT $speed infinite, ballShadowO $speed infinite;
+
+  @keyframes ballShadowT {
+    #{$stepInit},
+    #{$step2} {
+      transform: translate(-16.7em, 50%) rotateX(90deg) translateZ(1px);
+      animation-timing-function: ease-in;
+    }
+    #{$step3} {
+      transform: translate(-40em, 50%) rotateX(90deg) translateZ(1px);
+      animation-timing-function: ease-in;
+    }
+    #{$step4} {
+      transform: translate(-7.7em, 50%) rotateX(90deg) translateZ(1px);
+      animation-timing-function: linear;
+    }
+    #{$step5} {
+      transform: translate(39.5em, 50%) rotateX(90deg) translateZ(1px);
+      animation-timing-function: ease-out;
+    }
+  }
+
+  @keyframes ballShadowO {
+    #{$stepInit},
+    #{$step2},
+    #{$step5 + 5%},
+    #{$step5 + 11%},
+    #{$step5 + 15%},
+    #{$step5 + 17%},
+    #{$step5 + 19%},
+    #{$step5 + 21%} {
+      opacity: 1;
+      animation-timing-function: ease-out;
+    }
+    #{$step2 + 12%},
+    #{$step5} {
+      opacity: 0;
+    }
+    #{$step5 + 8%} {
+      opacity: 0.1;
+      animation-timing-function: ease-in;
+    }
+    #{$step5 + 13%} {
+      opacity: 0.2;
+      animation-timing-function: ease-in;
+    }
+    #{$step5 + 16%} {
+      opacity: 0.4;
+      animation-timing-function: ease-in;
+    }
+    #{$step5 + 18%} {
+      opacity: 0.6;
+      animation-timing-function: ease-in;
+    }
+    #{$step5 + 20%} {
+      opacity: 0.8;
+      animation-timing-function: ease-in;
+    }
+  }
+}
+
+.wall {
+  left: 29.5em;
+  bottom: -10em;
+  width: 30em;
+  height: 16em;
+  background-image: linear-gradient(#fdd7, #0000),
+    repeating-linear-gradient(45deg, #fdd1 0 1px, #0000 1px 1em);
+  transform: rotateY(-90deg);
+
+  &_back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform: translateZ(-1em);
+    background-image: linear-gradient(#fdd7, #0000),
+      repeating-linear-gradient(-45deg, #fdd1 0 1px, #0000 1px 1em);
+  }
+
+  &_top {
+    position: absolute;
+    width: 100%;
+    height: 1em;
+    background-color: #fdd7;
+    transform: rotateX(-90deg);
+    transform-origin: top;
+  }
+
+  &_side {
+    position: absolute;
+    width: 1em;
+    height: 100%;
+    background-image: linear-gradient(#fdd5, #fff0);
+
+    &:nth-child(2) {
+      transform-origin: left;
+      transform: rotateY(90deg);
+    }
+    &:nth-child(3) {
+      right: 0;
+      transform-origin: right;
+      transform: rotateY(-90deg);
+    }
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 7em;
+    width: 8em;
+    height: 8em;
+    background-image: radial-gradient(#000, #0000 66%);
+    transform: translate(-50%, -50%);
+    animation: wallShadow $speed infinite;
+
+    @keyframes wallShadow {
+      #{$stepInit},
+      #{$step5 - 1%},
+      #{$step5 + 2%} {
+        opacity: 0;
+        animation-timing-function: ease-in;
+      }
+      #{$step5} {
+        opacity: 0.2;
+        animation-timing-function: ease-out;
+      }
+    }
+  }
+}
+
+.floor {
+  width: 100em;
+  height: 100em;
+  background-color: #262222;
+  background-image: radial-gradient(#0000, #111 66%),
+    radial-gradient(at 25em 50em, #000, #0000 5em),
+    repeating-linear-gradient(45deg, #0000 0 1em, #0005 0 2em),
+    repeating-linear-gradient(135deg, #0000 0 1em, #0005 0 2em);
+  transform: translate(-50%, -50%) rotateX(90deg) translateZ(-10em);
+}
